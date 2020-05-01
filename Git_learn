@@ -1,0 +1,355 @@
+Tasklist --> show all processes running in Windows. (Linux ps)
+
+ver --> Windows version. (linux uname -a)
+
+cd --> cd only without flags gives pwd (linux pwd)
+
+doskey /h OR F7 --> history (linux history)
+
+
+******************************
+
+GIT Commands
+
+
+Environment: 
+
+$git --version (provide version of git installed)
+$git config --list (list all git configurations)
+$git config -l (list all git configurations)
+$git config --global core.editor notepad++ (adding global config parameter)
+$git config --global user.name User1 (Add username in config)
+$git config --global user.email user1@domain.com (Add email in config)
+
+
+Initailization of git project/repository:
+
+First create a directory e.g. demogit and chage directory to demogit and enter below command:
+
+$git init (initialize git reprository)
+
+e.g. 
+
+$ cd /E/Anand/gitIntro 
+$ git init
+Initialized empty Git repository in E:/Anand/gitIntro/.git/
+
+#ignore files which you do not want it to have version controled.
+
+For project based .gitignore files, you can get readymade files from https://www.gitignore.io/
+
+$touch .gitignore
+
+GLOBAL ignore file:
+
+$ touch ~/.gitignore
+$ git config --global core.excludesFile ~/.gitignore
+
+#git status
+
+$git status (shows if there is any changes made in working directory/repository and staging area)
+
+#git add files to staging:
+
+$git add src/*
+$git add demo.java
+$git add -A OR git add -all
+
+
+"The git commit command captures a snapshot of the project's currently staged changes. 
+
+Committed snapshots can be thought of as “safe” versions of a project—Git will never change them unless you explicitly ask it to. 
+
+Prior to the execution of git commit, The git add command is used to promote or 'stage' changes to the project that will be stored in a commit. These two commands git commit and git add are two of the most frequently used."
+
+#git commit (finalize changes, git will create a snapshot)
+
+$git commit
+
+(Simple commit command, open text editor to enter message)
+
+$git commit -m "Message"
+
+(git commit command with message)
+
+$git commit -am "Message"
+
+(Record changes to the repository)
+
+$git commit --amend
+
+(change the commit message on the last unpushed commit.)
+
+
+# gitk (graphical browser to see changes)
+
+$gitk
+
+#Differences in commits
+
+You can check differences in commit by below command
+
+$git diff
+
+(Check for changes in working directory and staging)
+
+#remove file from tracking 
+
+$git rm demo.txt
+
+
+#get logs of commits
+
+$git log (default logs for commit)
+
+
+*****************************
+commit bc5244c930c40b31912c82b5b4df600939729546
+Author: User1 <user1@domain.com>
+Date:   Sun Apr 12 14:32:26 2020 +0530
+
+    First Commit
+
+*****************************
+
+Log flavors:
+
+$git log -3 (show only top three commits)
+
+$git log --author "user1*" (logs by committer or user)
+$git log --committer "*user1*"
+
+$git log --before 2020-02-05 (log before yyyy-mm-dd)
+$git log --after 2.days.ago
+$git log --after <date> --before <date>
+$git log --oneline (oneline commit logs)
+$git log --graph (The Git Log tool can also display the commit history in an ascii art graphical representation with the –graph option)
+$git log --pretty=format:"Commit Hash: %H, Author: %aN, Date: %aD"
+$git log --pretty=oneline
+
+
+#git Branch
+
+
+1) Create branch
+
+$git branch <name_of_your_new_branch>
+
+2) Add a new remote for your branch :
+
+$ git remote add [name_of_your_remote] [name_of_your_new_branch]
+
+#Delete a branch on your local filesystem :
+
+$ git branch -d [name_of_your_new_branch]
+
+
+
+#The git checkout command switches between branches or restores working tree files. 
+
+Three main functions:
+
+1) Checking out files
+2) Checking out Branch
+3) Checking out commits
+
+Git changes between any commit or branch. You may call it as restore point.
+
+$git checkout BRANCH-NAME
+
+
+Git create new branch and switch to it
+
+$git checkout -b NEW-BRANCH-NAME  
+
+$git checkout d26b3ac (restore files to commit point)
+
+It is the restore point snapshot. which is loaded in order to work. e.g. Feature branch has 3 commits for adding files F1, F2 and F3.
+
+F1 abc
+F2 bde
+F3 efg (HEAD)
+
+Above are files added and their SHA1 commit Ids.We are at F3 after adding F3 file. We will then switch to F2 by below command.
+
+$git checkout bde (Do not have space and commit id will be 7 digit d26b3ac or 40 digit d26b3ac65851b7936ad607679f86f7441ae2819a)
+
+#checkout for file
+
+when files or changes are not commited they can be revert back by below command.
+
+$git checkout -- <file_name>
+
+reset.txt has below lines after commit 
+
+>abc
+
+However; we added 
+
+>abc
+>bca
+
+but changes are not commited yet. to reset it to older version. we will use below command:
+
+$git checkout -- reset.txt
+
+ 	
+
+***It’s important to understand that git checkout -- <file> is a dangerous command. Any local changes you made to that file are gone — Git just replaced that file with the most recently-committed version. Don’t ever use this command unless you absolutely know that you don’t want those unsaved local changes.
+
+*Branch off the new release branch from the latest release tag.
+git checkout tags/v0.8.1 -b release_v0.8.2
+
+
+#git reset --> Reset changes from any commit in past or rollback to previous commited change.
+
+* Simply reset is to reset commited changes using commit ID.
+
+The git reset command allows you to RESET your current head to a specified state. You can reset the state of specific files as well as an entire branch.
+
+$git reset --hard f63fbc2a3b4110ef35a285bf74342e6b46ec2d93
+
+Here f63fbc2a3b4110ef35a285bf74342e6b46ec2d93 is the previous commit ID and all changes will be discarded. HEAD will be placed at f63fbc2a3b4110ef35a285bf74342e6b46ec2d93 or previous commit ID.
+
+$git reset MODE COMMIT
+
+The options for MODE are:
+
+    --soft: does not reset the index file or working tree, but resets HEAD to commit. Changes all files to “Changes to be commited”
+    --mixed: resets the index but not the working tree and reports what has not been updated
+    --hard: resets the index and working tree. Any changes to tracked files in the working tree since commit are discarded
+    --merge: resets the index and updates the files in the working tree that are different between commit and HEAD, but keeps those which are different between the index and working tree
+    --keep: resets index entries and updates files in the working tree that are different between commit and HEAD. If a file that is different between commit and HEAD has local changes, the reset is aborted
+
+
+https://guide.freecodecamp.org/git/git-reset/
+
+
+#Git revert
+
+The git revert command undoes a commit, but unlike git reset, which removes the commit from the commit history, it appends a new commit with the resulting content. This prevents Git from losing history, which is important for the integrity of your revision history and for reliable collaboration.
+
+$git revert c34deca
+
+
+It will revert changes but keep old history or log.
+
+
+-n --> option do not commit changes. User has to explicitly commit.
+
+
+#Undo changes
+
+1) Undo uncommited 
+$git checkout -- filename
+
+2) Undo commited 
+$git revert 
+
+
+
+
+#git blame you can see who changed what in a specific file, line by line, which is useful if you work in a team, instead of alone. For example, if a line of code makes you wonder why it is there, you can use git blame and you will know who you must ask.
+
+$git blame NAME_OF_THE_FILE
+
+
+#Tagging lets developers mark important checkpoints in the course of their projects development. For instance, software release versions can be tagged. (Ex: v1.3.2) It essentially allows you to give a commit a special name(tag).
+
+Create tag:
+
+git tag -a v1.2 -m "my version 1.4"
+
+
+
+
+#Git has an area called the stash where you can temporarily store a snapshot of your changes without committing them to the repository. It’s separate from the working directory, the staging area, or the repository.
+
+Create stash
+$git stash save "optional message for yourself"
+
+List stash
+$git stash list
+
+
+To retrieve changes out of the stash and apply them to the current branch you’re on, you have two options:
+
+$git stash apply STASH-NAME (applies the changes and leaves a copy in the stash)
+
+
+$git stash pop STASH-NAME (applies the changes and removes the files from the stash)
+
+Drop Stash
+$git stash drop STASH-NAME
+
+Delete All Stashes
+$git stash clear
+
+
+
+
+
+
+
+
+
+What are Git hooks?
+
+Git Hooks are scripts located in the .git/hooks/ directory of a git repository. These scripts run after being triggered by different stages in the version control process.
+
+$$https://githooks.com/
+http://ryanflorence.com/deploying-websites-with-a-tiny-git-hook/
+
+Git hooks are scripts that Git executes before or after events such as: commit, push, and receive. Git hooks are a built-in feature - no need to download anything. Git hooks are run locally.
+
+These hook scripts are only limited by a developer's imagination. Some example hook scripts include:
+
+    pre-commit: Check the commit message for spelling errors.
+    pre-receive: Enforce project coding standards.
+    post-commit: Email/SMS team members of a new commit.
+    post-receive: Push the code to production.
+
+How do git hooks work?
+
+Every Git repository has a .git/hooks folder with a script for each hook you can bind to. You're free to change or update these scripts as necessary, and Git will execute them when those events occur. 
+
+
+#Add git remote to exiting project or new project:
+
+…or create a new repository on the command line
+
+echo "# git_training" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/anandsprodigy/git_training.git
+git push -u origin master
+                
+
+…or push an existing repository from the command line
+
+$git remote add origin https://github.com/anandsprodigy/git_training.git
+$git push -u origin master
+
+
+*Get remote name
+$git remote
+$git remote
+>origin
+
+We can add any name for remote e.g. 
+
+$git remote add github_git https://github.com/anandsprodigy/git_training.git
+
+* Get Git remote URLS for fetch and push
+
+$ git remote -v
+origin  https://github.com/anandsprodigy/git_training.git (fetch)
+origin  https://github.com/anandsprodigy/git_training.git (push)
+
+
+PULL = FETCH + MERGE
+
+*FETCH --> Update your local copy as per remote
+
+*MERGE --> 
